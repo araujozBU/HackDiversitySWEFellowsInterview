@@ -24,6 +24,8 @@ def get_routes(session_id, routes_url):
     }
 
     response = requests.get(routes_url, headers=headers)
+    #debug
+    print(response.json())
     if response.status_code == 200: 
         return response.json()  
     else:
@@ -40,10 +42,11 @@ def filter_accessible_routes(routes):
     for route in routes:
         # Check if the 'accessible' field is True
         if route.get("accessible") == True:
-            accessible_routes.append(route)  # Add the route to the result list
+            # Append simplified version (id and distance only)
+            accessible_routes.append({"id": route["id"], "distance": route["distance"]})  # Add the route to the result list
 
     # Print the result for verification
-    print("Non Sorted - Accessible Routes:", accessible_routes)
+    # print("Non Sorted - Accessible Routes:", accessible_routes)
     return accessible_routes
 
 #########################################################################
@@ -76,15 +79,30 @@ def submit_sorted_routes(session_id, sorted_routes, submit_url):
     else:
         print("Submission failed:", response.text)
 
+def check_progress(session_id):
+    headers = {
+        "Authorization": f"Bearer {session_id}"
+    }
+    status_url = "https://hackdiversity.xyz/api/navigation/status"
+
+    response = requests.get(status_url, headers=headers)
+    if response.status_code == 200:
+        progress = response.json()
+        print("Progress Status:", progress)
+        return progress
+    else:
+        print("Error checking progress:", response.text)
+        return None
 
 def main():
     # Start session
-    session_id = start_session("Zaki", "Araujo")
-    if not session_id:
-        return
-
+    #session_id = start_session("Zaki", "Araujo")
+    #if not session_id:
+        #return
+    #print(session_id)
+    session_id = "5d308324-0b1f-4fd7-8700-7222b2e7f804"
     # Retrieve test routes
-    url = "https://hackdiversity.xyz/api/test/mockRoutes"
+    url = "https://hackdiversity.xyz/api/navigation/routes"
     submit_url = "https://hackdiversity.xyz/api/test/submit-sorted-routes"
     all_routes = get_routes(session_id, url)
 
@@ -98,6 +116,10 @@ def main():
     feedback = submit_sorted_routes(session_id, filtered_routes, submit_url)
     if feedback:
         print("Feedback from test submission:", feedback)
+
+    
+    # Check progress
+    check_progress(session_id)
 
 if __name__ == "__main__":
     main()
