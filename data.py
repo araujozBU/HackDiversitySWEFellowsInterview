@@ -45,12 +45,12 @@ print("Non Sorted - Accessible Routes:", accessible_routes)
 #########################################################################
 # Use bubble sort to sort the distances
 
-n = len(accessible_routes)
+n = len(accessible_routes) #num entries in the accessible_routes list returned 
 
 for i in range(0, n): #iterate through every element in the list
     for j in range(0, n-i-1): #
         if accessible_routes[j]["distance"] > accessible_routes[j+1]["distance"]: #compare the first element to the one after it 
             accessible_routes[j], accessible_routes[j+1] = accessible_routes[j+1], accessible_routes[j] #swap
 
-#check bubble sort results
-print("Sorted - ", accessible_routes)
+#bubble sort results
+print("Final List of Sorted Accessible Routes - ", accessible_routes)
