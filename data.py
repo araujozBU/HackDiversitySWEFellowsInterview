@@ -30,20 +30,27 @@ else:
 
 
 #######################################################################
-#Fucntion to check if the data is accessible using linear search
-def filter_accessible_routes(routes):
-    
-    accessible_routes = []  # List to store accessible routes
+#Filter accessible data using linear search
+accessible_routes = []  # store accessible routes
 
-    # Iterate through each route
-    for route in routes:
-        # Check if the 'accessible' field is True
-        if route.get("accessible") == True:
-            accessible_routes.append(route)  # Add the route to the result list
-
-    return accessible_routes  # Return the filtered list
-
-accessible_routes = filter_accessible_routes(routes)
+# Iterate through each route
+for route in routes:
+    # Check if the 'accessible' field is True
+    if route.get("accessible") == True:
+        accessible_routes.append(route)  # Add the route to the result list
 
 # Print the result for verification
-print("Accessible Routes:", accessible_routes)
+print("Non Sorted - Accessible Routes:", accessible_routes)
+
+#########################################################################
+# Use bubble sort to sort the distances
+
+n = len(accessible_routes)
+
+for i in range(0, n): #iterate through every element in the list
+    for j in range(0, n-i-1): #
+        if accessible_routes[j]["distance"] > accessible_routes[j+1]["distance"]: #compare the first element to the one after it 
+            accessible_routes[j], accessible_routes[j+1] = accessible_routes[j+1], accessible_routes[j] #swap
+
+#check bubble sort results
+print("Sorted - ", accessible_routes)
